@@ -26,6 +26,8 @@ async function run() {
         await client.connect();
         const database = client.db('travel_booking');
         const tourOfferCollection = database.collection('tourOffers');
+        //for user order
+        const userOrderCollection = database.collection('orders');
 
         //Get API
         app.get('/tourOffers', async (req, res) => {
@@ -41,18 +43,51 @@ async function run() {
             const tourOffer = await tourOfferCollection.findOne(query);
             console.log(tourOffer);
             res.json(tourOffer);
-        })
+        });
+
 
         // POST API
         app.post('/tourOffers', async (req, res) => {
             const tourOffer = await req.body;
-
             console.log('hit the post', tourOffer);
-
             const result = await tourOfferCollection.insertOne(tourOffer);
-
             console.log(result)
             res.json(result)
+        });
+        //GET 
+        app.get('/orders', async (req, res) => {
+            const cursor = userOrderCollection.find({});
+            const orders = await cursor.toArray();
+            res.send(orders)
+        });
+
+        // POST for user Order
+        app.post('/orders', async (req, res) => {
+            const order = req.body;
+            const result = await userOrderCollection.insertOne(order)
+            res.json(result)
+        });
+
+        // DELETE API
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await userOrderCollection.deleteOne(query);
+            console.log('deleting user order', result);
+            res.json(result);
+        })
+
+        //get my orders
+        // app.get('/myOrders/:email', async (req, res) => {
+        //     const result = await tourOfferCollection.find({ email: req.params.email }).toArray();
+        //     res.json(result);
+        // })
+
+        //GET API for order
+        app.get('/orders', async (req, res) => {
+            const result = await userOrderCollection.findOne({}).toArray();
+            res.json(result);
+            console.log(result);
         })
     }
     finally {
@@ -60,11 +95,6 @@ async function run() {
     }
 }
 run().catch(console.dir);
-
-
-
-
-
 
 
 //===================
