@@ -2,6 +2,7 @@
 const express = require('express')
 //mongodb import
 const { MongoClient } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 //import cors
 const cors = require('cors');
 //dotenv config
@@ -32,6 +33,15 @@ async function run() {
             const tourOffers = await cursor.toArray();
             res.send(tourOffers);
         });
+        //Get Single Item load
+        app.get('/tourOffers/:id', async (req, res) => {
+            const id = req.params?.id;
+            console.log(id);
+            const query = { _id: ObjectId(id) };
+            const tourOffer = await tourOfferCollection.findOne(query);
+            console.log(tourOffer);
+            res.json(tourOffer);
+        })
 
         // POST API
         app.post('/tourOffers', async (req, res) => {
