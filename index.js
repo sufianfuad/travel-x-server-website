@@ -10,8 +10,8 @@ require('dotenv').config();
 
 // express call from app
 const app = express();
-const port = 7000;
-// process.env.PORT || 
+const port = process.env.PORT || 7000;
+//  
 
 //middleware
 app.use(cors());
