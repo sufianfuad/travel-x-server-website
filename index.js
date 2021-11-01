@@ -25,8 +25,9 @@ async function run() {
     try {
         await client.connect();
         const database = client.db('travel_booking');
+        //For tourOffer Collection
         const tourOfferCollection = database.collection('tourOffers');
-        //for user order
+        //for userOrder collection
         const userOrderCollection = database.collection('orders');
 
         //Get API
