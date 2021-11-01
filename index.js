@@ -75,13 +75,16 @@ async function run() {
             const result = await userOrderCollection.deleteOne(query);
             console.log('deleting user order', result);
             res.json(result);
+        });
+        //UPDATE
+        app.get('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const user = await userOrderCollection.findOne(query);
+            console.log('Load user id', id);
+            res.send(user)
         })
 
-        //get my orders
-        // app.get('/myOrders/:email', async (req, res) => {
-        //     const result = await tourOfferCollection.find({ email: req.params.email }).toArray();
-        //     res.json(result);
-        // })
 
         //GET API for order
         app.get('/orders', async (req, res) => {
